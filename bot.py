@@ -2,44 +2,33 @@ import telebot
 import requests
 from telebot import types
 
-bot = telebot.TeleBot ('1830224590:AAFnIJme-YVmdNY2IF12PRZCQ6RMjntlCGM')
-url = 'https://currate.ru/api/?get=rates&pairs=USDRUB,EURRUB&key=449b73efbd3e90bc28682fc8872a0522'
+bot = telebot.TeleBot('1830224590:AAFnIJme-YVmdNY2IF12PRZCQ6RMjntlCGM')
+url = 'http://data.fixer.io/api/latest?access_key=2d115dcac0b40b1e71c4de44fef23881'
 
 response = requests.get(url).json()
+markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+itembtn1 = types.KeyboardButton('USD')
+itembtn2 = types.KeyboardButton('EUR')
+markup.add(itembtn1, itembtn2)
+
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    itembtn1 = types.KeyboardButton('USD')
-    itembtn2 = types.KeyboardButton('EUR')
-    markup.add(itembtn1, itembtn2)
-    msg = bot.send_message(message.chat.id,
-                    "Выберите валюту", reply_markup=markup)
-    bot.register_next_step_handler(msg, money_step)
+    msg = bot.send_message(message.chat.id, "Выберите валюту", reply_markup=markup)
 
+
+@bot.message_handler(content_types='text')
 def money_step(message):
-    try:
-       markup = types.ReplyKeyboardRemove(selective=False)
-
-       for money in response:
-           if (message.text == money['data']):
-              bot.send_message(message.chat.id, printMoney(money['USDRUB'], money['EURRUB']),
-                               reply_markup=markup, parse_mode="Markdown")
-
-    except Exception as e:
-       bot.reply_to(message, 'Ты шо творишь , малай!')
-
-def printMoney(USDRUB,EURRUB):
-    '''Вывод курса пользователю'''
-    return " *Курс доллара:* " + str(USDRUB) + " *Курс евра:* " + str(EURRUB)
+    currency = message.text
+    if currency not in response["rates"]:
+        bot.send_message(message.chat.id, "Неверный курс", reply_markup=markup, parse_mode="Markdown")
+    else:
+        bot.send_message(message.chat.id, convert(currency, 'RUB'), reply_markup=markup, parse_mode="Markdown")
 
 
-bot.enable_save_next_step_handlers(delay=2)
+def convert(first, second):
+    return round(response['rates'][second] / response['rates'][first], 4)
 
 
-bot.load_next_step_handlers()
-
-bot.polling()
-
-
-
+if __name__ == '__main__':
+    bot.polling()
