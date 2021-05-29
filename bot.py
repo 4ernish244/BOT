@@ -7,15 +7,18 @@ url = 'http://data.fixer.io/api/latest?access_key=2d115dcac0b40b1e71c4de44fef238
 
 response = requests.get(url).json()
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-itembtn1 = types.KeyboardButton('USD')
-itembtn2 = types.KeyboardButton('EUR')
+
+itembtn1 = types.KeyboardButton('Узнать курс валюты')
+itembtn2 = types.KeyboardButton('Узнать PriceList в очках')
 markup.add(itembtn1, itembtn2)
 
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     msg = bot.send_message(message.chat.id, "Выберите валюту", reply_markup=markup)
-
+itembtn1 = types.KeyboardButton('USD')
+itembtn2 = types.KeyboardButton('EUR')
+markup.add(itembtn1, itembtn2)
 
 @bot.message_handler(content_types='text')
 def money_step(message):
