@@ -27,7 +27,7 @@ def money_step(message):
 
 
 def convert(first, second):
-    return round(response['rates'][second] / response['rates'][first], 4)
+    return round(response['rates'][second] / response['rates'][first], 6)
 
 
 if __name__ == '__main__':
