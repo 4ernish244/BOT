@@ -1,3 +1,4 @@
 pytelegrambotapi
 sqlalchemy
 psycopg2
+requests
