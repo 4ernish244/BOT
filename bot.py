@@ -5,7 +5,8 @@ from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
     CallbackQuery, Message
 from database import new_user, edit_user, get_user
 
-bot = telebot.TeleBot('1830224590:AAFnIJme-YVmdNY2IF12PRZCQ6RMjntlCGM')
+token = os.environ['TOKEN_KEY']
+bot = telebot.TeleBot(token)
 url = 'https://free.currconv.com/api/v7/convert'
 api_key = '30a019dd6866e32564d6'
 
