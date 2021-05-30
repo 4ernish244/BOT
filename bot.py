@@ -4,6 +4,7 @@ from telebot import types
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, \
     CallbackQuery, Message
 from database import new_user, edit_user, get_user
+import os
 
 token = os.environ['TOKEN_KEY']
 bot = telebot.TeleBot(token)
